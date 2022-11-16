@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import { IncomingMessage, ServerResponse } from 'node:http';
 import path from 'node:path';
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
+import { middleware as xrayMiddleware } from 'aws-xray-sdk';
 import type { NextConfig } from 'next';
 import type { Options } from 'next/dist/server/next-server';
 import * as nss from 'next/dist/server/next-server';
@@ -43,6 +44,9 @@ const nextHandler = new NextNodeServer(config).getRequestHandler();
 // to translate from API Gateway v2 to next request/response
 const server = slsHttp(
   async (req: IncomingMessage, res: ServerResponse) => {
+    // annotate xray trace with request info
+    xrayMiddleware.traceRequestResponseCycle(req, res);
+
     await nextHandler(req, res).catch((e) => {
       console.error(`NextJS request failed due to:`);
       console.error(e);

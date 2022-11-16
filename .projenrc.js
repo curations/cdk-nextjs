@@ -33,6 +33,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'serverless-http',
     'jszip',
     'glob',
+    'aws-xray-sdk',
   ] /* Runtime dependencies of this module. */,
   devDeps: ['aws-sdk', 'constructs@10.1.21'] /* Build dependencies for this module. */,
 

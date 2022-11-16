@@ -137,6 +137,10 @@
       "type": "bundled"
     },
     {
+      "name": "aws-xray-sdk",
+      "type": "bundled"
+    },
+    {
       "name": "cross-spawn",
       "type": "bundled"
     },
