@@ -5,12 +5,15 @@
 import fs from 'node:fs';
 import { IncomingMessage, ServerResponse } from 'node:http';
 import path from 'node:path';
+import { Tracer, captureLambdaHandler } from '@aws-lambda-powertools/tracer';
+import middy from '@middy/core';
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
-import { middleware as xrayMiddleware } from 'aws-xray-sdk';
 import type { NextConfig } from 'next';
 import type { Options } from 'next/dist/server/next-server';
 import * as nss from 'next/dist/server/next-server';
 import slsHttp from 'serverless-http';
+
+const tracer = new Tracer({ serviceName: 'nextjs' });
 
 const getErrMessage = (e: any) => ({ message: 'Server failed to respond.', details: e });
 
@@ -45,7 +48,6 @@ const nextHandler = new NextNodeServer(config).getRequestHandler();
 const server = slsHttp(
   async (req: IncomingMessage, res: ServerResponse) => {
     // annotate xray trace with request info
-    xrayMiddleware.traceRequestResponseCycle(req, res);
 
     await nextHandler(req, res).catch((e) => {
       console.error(`NextJS request failed due to:`);
@@ -66,4 +68,8 @@ const server = slsHttp(
   }
 );
 
-export const handler: LambdaUrlFunctionHandler = server;
+// wrap in middleware for xray tracing
+// https://awslabs.github.io/aws-lambda-powertools-typescript/latest/core/tracer/#lambda-handler
+export const handler: LambdaUrlFunctionHandler = middy(server).use(
+  captureLambdaHandler(tracer, { captureResponse: false })
+);

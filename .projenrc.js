@@ -15,6 +15,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     // ignorePatterns: ['assets/**/*']
   },
   majorVersion: 1,
+  typescriptVersion: '4.7.4',
 
   tsconfig: { compilerOptions: { noUnusedLocals: false }, include: ['assets/**/*.ts'] },
   tsconfigDev: { compilerOptions: { noUnusedLocals: false } },
@@ -33,7 +34,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'serverless-http',
     'jszip',
     'glob',
-    'aws-xray-sdk',
+    '@aws-lambda-powertools/tracer',
+    '@middy/core ',
   ] /* Runtime dependencies of this module. */,
   devDeps: ['aws-sdk', 'constructs@10.1.21'] /* Build dependencies for this module. */,
 
@@ -44,4 +46,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
 //   rules: {},
 // });
 // project.tsconfig.addInclude('assets/**/*.ts');
+
+// add esbuild as an optional dependency
+project.tryFindObjectFile('package.json')?.addOverride('optionalDependencies', {
+  ['esbuild']: '^0.15.14',
+});
+
 project.synth();

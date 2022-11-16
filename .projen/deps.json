@@ -114,7 +114,16 @@
     },
     {
       "name": "typescript",
+      "version": "4.7.4",
       "type": "build"
+    },
+    {
+      "name": "@aws-lambda-powertools/tracer",
+      "type": "bundled"
+    },
+    {
+      "name": "@middy/core ",
+      "type": "bundled"
     },
     {
       "name": "@types/aws-lambda",
@@ -134,10 +143,6 @@
     },
     {
       "name": "aws-lambda",
-      "type": "bundled"
-    },
-    {
-      "name": "aws-xray-sdk",
       "type": "bundled"
     },
     {
