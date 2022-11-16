@@ -29,7 +29,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@types/fs-extra',
     '@types/micromatch',
     '@types/aws-lambda',
-    'esbuild',
+    // 'esbuild',
     'aws-lambda',
     'serverless-http',
     'jszip',
@@ -43,7 +43,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
   sampleCode: false,
 });
 // project.eslint.addOverride({
-//   rules: {},
+//   files: ['**/*.ts'],
+//   rules: {
+//     'import/no-extraneous-dependencies': 'off',
+//   },
 // });
 // project.tsconfig.addInclude('assets/**/*.ts');
 
